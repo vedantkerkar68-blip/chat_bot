@@ -296,6 +296,83 @@ This is a complete implementation with all requested features:
 - ✅ Camera integration
 - ✅ Secure API key management
 
+## 🚀 Deployment on Render
+
+### Prerequisites
+- A GitHub account with this repository
+- A Render account (free tier available)
+- A Google Gemini API key
+
+### Deployment Steps
+
+1. **Push your code to GitHub** (if not already done)
+   ```bash
+   git add .
+   git commit -m "Prepare for Render deployment"
+   git push origin main
+   ```
+
+2. **Create a new Web Service on Render**
+   - Go to [Render Dashboard](https://dashboard.render.com)
+   - Click "New +" → "Web Service"
+   - Connect your GitHub repository
+   - Select the repository: `vedantkerkar68-blip/chat_bot`
+
+3. **Configure the Service**
+   - **Name**: `ai-chatbot-app` (or any name you prefer)
+   - **Environment**: `Python 3`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `streamlit run main_web.py --server.port $PORT --server.address 0.0.0.0 --server.headless true`
+   - **Plan**: Free (or choose a paid plan)
+
+4. **Set Environment Variables**
+   - Go to "Environment" section
+   - Add a new environment variable:
+     - **Key**: `GEMINI_API_KEY`
+     - **Value**: Your Google Gemini API key
+   - Click "Save Changes"
+
+5. **Deploy**
+   - Click "Create Web Service"
+   - Wait for the build to complete (usually 2-3 minutes)
+   - Your app will be live at: `https://your-app-name.onrender.com`
+
+### Using render.yaml (Alternative Method)
+
+If you prefer using the `render.yaml` file:
+1. The repository already includes `render.yaml`
+2. Go to Render Dashboard → "New +" → "Blueprint"
+3. Connect your GitHub repository
+4. Render will automatically detect and use `render.yaml`
+5. Set the `GEMINI_API_KEY` environment variable in the dashboard
+
+### Important Notes for Render Deployment
+
+- **Database**: SQLite databases are ephemeral on Render's free tier. Data may be lost on restarts. For production, consider using PostgreSQL or another persistent database.
+- **Voice Features**: Some voice features may have limitations in a web environment
+- **Camera Features**: Camera capture is not available in the web version
+- **File Uploads**: Image uploads work, but files are stored temporarily
+- **Free Tier Limitations**: 
+  - Services spin down after 15 minutes of inactivity
+  - First request after spin-down may take 30-60 seconds
+  - Upgrade to a paid plan for always-on service
+
+### Troubleshooting Deployment
+
+**Build fails:**
+- Check that all dependencies in `requirements.txt` are valid
+- Ensure Python version compatibility
+
+**App crashes on start:**
+- Verify `GEMINI_API_KEY` is set correctly
+- Check Render logs for error messages
+- Ensure start command is correct
+
+**App doesn't respond:**
+- Wait 30-60 seconds for first request (free tier spin-up)
+- Check Render dashboard for service status
+- Verify the service is not sleeping
+
 ## 📄 License
 
 This project is created for educational and personal use. Please ensure compliance with OpenAI's usage policies when using their API services.
